@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm run test -- --watch",
-    "test:coverage": "npm run test -- --coverage"
+    "test:coverage": "npm run test -- --coverage",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "eslint-plugin-import": "2",
     "eslint-plugin-node": "11",
     "eslint-plugin-promise": "4",
+    "husky": "^7.0.4",
     "jest": "^27.5.1",
     "jest-mock-extended": "^2.0.5",
     "ts-jest": "^27.1.4",
