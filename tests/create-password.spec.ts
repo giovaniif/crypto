@@ -1,22 +1,18 @@
 import { mock } from 'jest-mock-extended'
 
-import { CreatePasswordRepository, setupCreatePassword } from '../src/create-password'
+import { EncryptPassword, setupCreatePassword } from '../src/create-password'
 
 describe('Create Password Usecase', () => {
-  it('should call create password repository with correct input', async () => {
-    const createPasswordRepository = mock<CreatePasswordRepository>()
-    const sut = setupCreatePassword(createPasswordRepository)
+  it('should call encryptPassword with correct password', async () => {
+    const encryptPassword = mock<EncryptPassword>()
+    const sut = setupCreatePassword(encryptPassword)
     const password = 'any_pasword'
-    const title = 'any_title'
-    const userId = 'any_user_id'
 
-    await sut({ password, title, userId })
+    await sut({ password })
 
-    expect(createPasswordRepository.createPassword).toHaveBeenCalledWith({
-      password,
-      title,
-      userId
+    expect(encryptPassword.encrypt).toHaveBeenCalledWith({
+      password
     })
-    expect(createPasswordRepository.createPassword).toHaveBeenCalledTimes(1)
+    expect(encryptPassword.encrypt).toHaveBeenCalledTimes(1)
   })
 })
