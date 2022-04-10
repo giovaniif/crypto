@@ -4,10 +4,15 @@ namespace CreatePasswordRepository {
     title: string
     userId: string
   }
+  export type Output = {
+    password: string
+    title: string
+    userId: string
+  }
 }
 
 export interface CreatePasswordRepository {
-  createPassword: (input: CreatePasswordRepository.Input) => Promise<void>
+  createPassword: (input: CreatePasswordRepository.Input) => Promise<CreatePasswordRepository.Output>
 }
 namespace EncryptPassword {
   export type Input = {
@@ -22,12 +27,12 @@ export interface EncryptPassword {
 export type CreatePassword = (input: Input) => Output
 type Setup = (encryptPassword: EncryptPassword, createPasswordRepo: CreatePasswordRepository) => CreatePassword
 type Input = { password: string, userId: string, title: string }
-type Output = Promise<void>
+type Output = Promise<{ password: string, userId: string, title: string }>
 
 export const setupCreatePassword: Setup = (encryptPassword, createPasswordRepo) => {
   return async ({ password, title, userId }) => {
     const encryptedPassword = encryptPassword.encrypt({ password })
-    await createPasswordRepo.createPassword({
+    return createPasswordRepo.createPassword({
       password: encryptedPassword,
       title,
       userId

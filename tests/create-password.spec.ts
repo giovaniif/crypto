@@ -19,6 +19,11 @@ describe('Create Password Usecase', () => {
     userId = 'userId'
     title = 'title'
     createPasswordRepo = mock()
+    createPasswordRepo.createPassword.mockResolvedValue({
+      password: encryptedPassword,
+      title,
+      userId
+    })
   })
 
   beforeEach(() => {
@@ -43,5 +48,15 @@ describe('Create Password Usecase', () => {
       userId
     })
     expect(createPasswordRepo.createPassword).toHaveBeenCalledTimes(1)
+  })
+
+  it('should return the create password', async () => {
+    const result = await sut({ password, title, userId })
+
+    expect(result).toEqual({
+      password: encryptedPassword,
+      title,
+      userId
+    })
   })
 })
