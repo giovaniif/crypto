@@ -1,18 +1,47 @@
-import { mock } from 'jest-mock-extended'
+import { mock, MockProxy } from 'jest-mock-extended'
 
-import { EncryptPassword, setupCreatePassword } from '../src/create-password'
+import { EncryptPassword, setupCreatePassword, CreatePassword, CreatePasswordRepository } from '../src/create-password'
 
 describe('Create Password Usecase', () => {
-  it('should call encryptPassword with correct password', async () => {
-    const encryptPassword = mock<EncryptPassword>()
-    const sut = setupCreatePassword(encryptPassword)
-    const password = 'any_pasword'
+  let encryptPassword: MockProxy<EncryptPassword>
+  let sut: CreatePassword
+  let password: string
+  let encryptedPassword: string
+  let userId: string
+  let title: string
+  let createPasswordRepo: MockProxy<CreatePasswordRepository>
 
-    await sut({ password })
+  beforeAll(() => {
+    encryptedPassword = 'encryptedPassword'
+    encryptPassword = mock()
+    encryptPassword.encrypt.mockReturnValue(encryptedPassword)
+    password = 'password'
+    userId = 'userId'
+    title = 'title'
+    createPasswordRepo = mock()
+  })
+
+  beforeEach(() => {
+    sut = setupCreatePassword(encryptPassword, createPasswordRepo)
+  })
+
+  it('should call encryptPassword with correct password', async () => {
+    await sut({ password, title, userId })
 
     expect(encryptPassword.encrypt).toHaveBeenCalledWith({
       password
     })
     expect(encryptPassword.encrypt).toHaveBeenCalledTimes(1)
+  })
+
+  it('should call createPassword with encrypted password, title and userId', async () => {
+    await sut({ password, title, userId })
+
+    expect(createPasswordRepo.createPassword).toHaveBeenCalledWith({
+      password: encryptedPassword,
+      title,
+      userId
+    })
+    expect(createPasswordRepo.createPassword).toHaveBeenCalledTimes(1)
   })
 })
