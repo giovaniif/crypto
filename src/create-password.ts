@@ -1,8 +1,8 @@
-import { Encrypt } from './encrypt'
+import { CryptoService } from './crypto'
 import { CreatePasswordRepository } from './password-repository'
 
 export type CreatePassword = (input: Input) => Output
-type Setup = (encryptPassword: Encrypt, createPasswordRepo: CreatePasswordRepository) => CreatePassword
+type Setup = (encryptPassword: CryptoService, createPasswordRepo: CreatePasswordRepository) => CreatePassword
 type Input = { password: string, userId: string, title: string }
 type Output = Promise<{ password: string, userId: string, title: string }>
 

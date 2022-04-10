@@ -1,11 +1,11 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { setupCreatePassword, CreatePassword } from '../src/create-password'
-import { Encrypt } from '../src/encrypt'
+import { CryptoService } from '../src/crypto'
 import { CreatePasswordRepository } from '../src/password-repository'
 
 describe('Create Password Usecase', () => {
-  let encryptPassword: MockProxy<Encrypt>
+  let encryptPassword: MockProxy<CryptoService>
   let sut: CreatePassword
   let password: string
   let encryptedPassword: string
