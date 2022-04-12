@@ -7,4 +7,5 @@ export namespace CryptoService {
 
 export interface CryptoService {
   encrypt: (input: CryptoService.Input) => CryptoService.Output
+  decrypt: (input: CryptoService.Input) => CryptoService.Output
 }

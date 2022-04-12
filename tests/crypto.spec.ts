@@ -6,6 +6,19 @@ import { env } from '../src/env'
 class TDEAEncryptionService implements CryptoService {
   constructor (private readonly algorithm: string, private readonly key: string) {}
 
+  decrypt ({ text }: CryptoService.Input): CryptoService.Output {
+    const md5Key = crypto
+      .createHash('md5')
+      .update(this.key)
+      .digest('hex')
+      .slice(0, 24)
+    const decipher = crypto.createDecipheriv('des-ede3', md5Key, '')
+
+    let decrypted = decipher.update(text, 'base64', 'utf8')
+    decrypted += decipher.final('utf8')
+    return decrypted
+  }
+
   encrypt ({ text }: CryptoService.Input): CryptoService.Output {
     const md5Key = crypto
       .createHash(this.algorithm)
@@ -31,5 +44,17 @@ describe('CryptoService', () => {
     const output = cryptoService.encrypt(input)
     expect(output).not.toBe(input.text)
     expect(output.length).toBe(24)
+  })
+
+  it('should decrypt a string', () => {
+    const algorithm = env.crypto.algorithm
+    const key = env.crypto.key
+    const cryptoService = new TDEAEncryptionService(algorithm, key)
+    const input = {
+      text: 'password'
+    }
+    const encrypted = cryptoService.encrypt(input)
+    const output = cryptoService.decrypt({ text: encrypted })
+    expect(output).toBe(input.text)
   })
 })
