@@ -8,7 +8,7 @@ type Output = Promise<{ password: string, userId: string, title: string }>
 
 export const setupCreatePassword: Setup = (encryptPassword, createPasswordRepo) => {
   return async ({ password, title, userId }) => {
-    const encryptedPassword = encryptPassword.encrypt({ password })
+    const encryptedPassword = encryptPassword.encrypt({ text: password })
     return createPasswordRepo.createPassword({
       password: encryptedPassword,
       title,

@@ -36,7 +36,7 @@ describe('Create Password Usecase', () => {
     await sut({ password, title, userId })
 
     expect(encryptPassword.encrypt).toHaveBeenCalledWith({
-      password
+      text: password
     })
     expect(encryptPassword.encrypt).toHaveBeenCalledTimes(1)
   })

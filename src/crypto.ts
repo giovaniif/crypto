@@ -1,6 +1,6 @@
-namespace CryptoService {
+export namespace CryptoService {
   export type Input = {
-    password: string
+    text: string
   }
   export type Output = string
 }
