@@ -5,7 +5,7 @@
 
 ### Flow
 - Receives the password, title, and user id ✅
-- If the user does not exists, returns an error
+- If the user does not exists, returns an error ✅
 - Else, call the encrypt password service ✅
 - Call the create password service ✅
 - Return the created password service ✅

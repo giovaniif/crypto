@@ -4,6 +4,7 @@ import { setupCreatePassword, CreatePassword } from '../src/create-password'
 import { CryptoService } from '../src/crypto'
 import { CreatePasswordRepository } from '../src/password-repository'
 import { LoadUserByIdRepository } from '../src/user-repository'
+import { UserNotFoundError } from '../src/user-not-found'
 
 describe('Create Password Usecase', () => {
   let encryptPassword: MockProxy<CryptoService>
@@ -29,6 +30,7 @@ describe('Create Password Usecase', () => {
       userId
     })
     loadUserByIdRepo = mock()
+    loadUserByIdRepo.loadById.mockResolvedValue(async () => ({}))
   })
 
   beforeEach(() => {
@@ -41,6 +43,14 @@ describe('Create Password Usecase', () => {
     expect(loadUserByIdRepo.loadById).toHaveBeenCalledWith({
       userId
     })
+  })
+
+  it('should throw if user not found', async () => {
+    loadUserByIdRepo.loadById.mockReturnValueOnce(undefined)
+
+    const promise = sut({ password, title, userId })
+
+    await expect(promise).rejects.toThrow(new UserNotFoundError())
   })
 
   it('should call encryptPassword with correct password', async () => {
