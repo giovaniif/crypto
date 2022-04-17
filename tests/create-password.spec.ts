@@ -3,6 +3,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 import { setupCreatePassword, CreatePassword } from '../src/create-password'
 import { CryptoService } from '../src/crypto'
 import { CreatePasswordRepository } from '../src/password-repository'
+import { LoadUserByIdRepository } from '../src/user-repository'
 
 describe('Create Password Usecase', () => {
   let encryptPassword: MockProxy<CryptoService>
@@ -12,6 +13,7 @@ describe('Create Password Usecase', () => {
   let userId: string
   let title: string
   let createPasswordRepo: MockProxy<CreatePasswordRepository>
+  let loadUserByIdRepo: MockProxy<LoadUserByIdRepository>
 
   beforeAll(() => {
     encryptedPassword = 'encryptedPassword'
@@ -26,10 +28,19 @@ describe('Create Password Usecase', () => {
       title,
       userId
     })
+    loadUserByIdRepo = mock()
   })
 
   beforeEach(() => {
-    sut = setupCreatePassword(encryptPassword, createPasswordRepo)
+    sut = setupCreatePassword(encryptPassword, createPasswordRepo, loadUserByIdRepo)
+  })
+
+  it('should call loadUserByIdRepository with correct user id', async () => {
+    await sut({ password, title, userId })
+
+    expect(loadUserByIdRepo.loadById).toHaveBeenCalledWith({
+      userId
+    })
   })
 
   it('should call encryptPassword with correct password', async () => {
