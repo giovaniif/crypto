@@ -1,7 +1,7 @@
 import { TDEAEncryptionService } from '../src/tdea-encryption-service'
 import { env } from '../src/env'
 
-describe('CryptoService', () => {
+describe('TDEAEncryptionService', () => {
   it('should encrypt a string', () => {
     const algorithm = env.crypto.algorithm
     const key = env.crypto.key
