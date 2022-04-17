@@ -1,5 +1,5 @@
-import { TDEAEncryptionService } from '../src/tdea-encryption-service'
-import { env } from '../src/env'
+import { TDEAEncryptionService } from '@/tdea-encryption-service'
+import { env } from '@/env'
 
 describe('TDEAEncryptionService', () => {
   it('should encrypt a string', () => {

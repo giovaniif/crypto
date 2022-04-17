@@ -1,7 +1,7 @@
-import { CryptoService } from './crypto'
-import { CreatePasswordRepository } from './password-repository'
-import { UserNotFoundError } from './user-not-found'
-import { LoadUserByIdRepository } from './user-repository'
+import { CryptoService } from '@/crypto'
+import { CreatePasswordRepository } from '@/password-repository'
+import { UserNotFoundError } from '@/user-not-found'
+import { LoadUserByIdRepository } from '@/user-repository'
 
 export type CreatePassword = (input: Input) => Output
 type Setup = (encryptPassword: CryptoService, createPasswordRepo: CreatePasswordRepository, loadUserByIdRepo: LoadUserByIdRepository) => CreatePassword

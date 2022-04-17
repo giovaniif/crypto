@@ -1,10 +1,10 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
-import { setupCreatePassword, CreatePassword } from '../src/create-password'
-import { CryptoService } from '../src/crypto'
-import { CreatePasswordRepository } from '../src/password-repository'
-import { LoadUserByIdRepository } from '../src/user-repository'
-import { UserNotFoundError } from '../src/user-not-found'
+import { setupCreatePassword, CreatePassword } from '@/create-password'
+import { CryptoService } from '@/crypto'
+import { CreatePasswordRepository } from '@/password-repository'
+import { LoadUserByIdRepository } from '@/user-repository'
+import { UserNotFoundError } from '@/user-not-found'
 
 describe('Create Password Usecase', () => {
   let encryptPassword: MockProxy<CryptoService>
