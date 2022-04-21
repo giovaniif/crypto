@@ -1,6 +1,7 @@
+import { mock, MockProxy } from 'jest-mock-extended'
+
 import { UserNotFoundError } from '@/domain/errors'
 import { CreatePassword } from '@/domain/usecases'
-import { mock, MockProxy } from 'jest-mock-extended'
 
 type HttpRequest = {
   body: {
@@ -13,7 +14,7 @@ type HttpRequest = {
 }
 
 type HttpResponse = {
-  body: MissingParamError | InvalidParamError | UserNotFoundError
+  body: MissingParamError | InvalidParamError | UserNotFoundError | { password: string, userId: string, title: string }
   statusCode: number
 }
 
@@ -65,7 +66,11 @@ class CreatePasswordController {
     }
 
     try {
-      await this.createPassword({ password, title, userId })
+      const createdPassword = await this.createPassword({ password, title, userId })
+      return {
+        body: createdPassword,
+        statusCode: 201
+      }
     } catch (err: any) {
       if (err instanceof UserNotFoundError) {
         return {
@@ -79,7 +84,6 @@ class CreatePasswordController {
         statusCode: 500
       }
     }
-    return {} as any
   }
 }
 
@@ -90,6 +94,7 @@ describe('CreatePasswordController', () => {
 
   beforeAll(() => {
     createPassword = jest.fn()
+    createPassword.mockImplementation(async () => ({ any: 'any' }))
     idValidator = mock()
     idValidator.isValid.mockImplementation(() => true)
   })
@@ -197,5 +202,22 @@ describe('CreatePasswordController', () => {
 
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(error)
+  })
+
+  it('should return 201 if usecase performs', async () => {
+    const httpRequest = {
+      body: {
+        password: 'any_password',
+        title: 'any_title'
+      },
+      auth: {
+        userId: 'valid_id'
+      }
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(201)
+    expect(httpResponse.body).toEqual({ any: 'any' })
   })
 })
