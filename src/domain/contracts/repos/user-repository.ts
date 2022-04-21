@@ -1,4 +1,4 @@
-import { User } from './user'
+import { User } from '@/domain/entities'
 
 namespace LoadUserByIdRepository {
   export type Input = { userId: string }

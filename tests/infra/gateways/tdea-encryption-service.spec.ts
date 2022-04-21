@@ -1,4 +1,4 @@
-import { TDEAEncryptionService } from '@/tdea-encryption-service'
+import { TDEAEncryptionService } from '@/infra/gateways'
 import { env } from '@/env'
 
 describe('TDEAEncryptionService', () => {

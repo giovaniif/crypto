@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 
-import { CryptoService } from './crypto'
+import { CryptoService } from '@/domain/contracts/gateways'
 
 export class TDEAEncryptionService implements CryptoService {
   constructor (private readonly algorithm: string, private readonly key: string) {}
