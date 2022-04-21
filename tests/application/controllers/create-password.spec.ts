@@ -3,10 +3,13 @@ type HttpRequest = {
     password?: string
     title?: string
   }
+  auth?: {
+    userId?: string
+  }
 }
 
 type HttpResponse = {
-  body: MissingParamError
+  body: MissingParamError | InvalidParamError
   statusCode: number
 }
 
@@ -15,6 +18,14 @@ class MissingParamError extends Error {
     super()
     this.message = `Missing param: ${param}`
     this.name = 'MissingParamError'
+  }
+}
+
+class InvalidParamError extends Error {
+  constructor (param: string) {
+    super()
+    this.message = `Invalid param: ${param}`
+    this.name = 'InvalidParamError'
   }
 }
 
@@ -27,8 +38,15 @@ class CreatePasswordController {
       }
     }
 
+    if (httpRequest.body.title === undefined || httpRequest.body.title === '' || httpRequest.body.title === null) {
+      return {
+        body: new MissingParamError('title'),
+        statusCode: 400
+      }
+    }
+
     return {
-      body: new MissingParamError('title'),
+      body: new InvalidParamError('userId'),
       statusCode: 400
     }
   }
@@ -66,5 +84,22 @@ describe('CreatePasswordController', () => {
 
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('title'))
+  })
+
+  it('shold return 400 if an invalid user id is provided', async () => {
+    const httpRequest = {
+      body: {
+        password: 'any_password',
+        title: 'any_title'
+      },
+      auth: {
+        userId: 'invalid_id'
+      }
+    }
+
+    const response = await sut.handle(httpRequest)
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new InvalidParamError('userId'))
   })
 })
