@@ -1,3 +1,4 @@
+import { UserNotFoundError } from '@/domain/errors'
 import { CreatePassword } from '@/domain/usecases'
 import { mock, MockProxy } from 'jest-mock-extended'
 
@@ -12,7 +13,7 @@ type HttpRequest = {
 }
 
 type HttpResponse = {
-  body: MissingParamError | InvalidParamError
+  body: MissingParamError | InvalidParamError | UserNotFoundError
   statusCode: number
 }
 
@@ -63,7 +64,21 @@ class CreatePasswordController {
       }
     }
 
-    await this.createPassword({ password, title, userId })
+    try {
+      await this.createPassword({ password, title, userId })
+    } catch (err: any) {
+      if (err instanceof UserNotFoundError) {
+        return {
+          body: new UserNotFoundError(),
+          statusCode: 400
+        }
+      }
+
+      return {
+        body: err,
+        statusCode: 500
+      }
+    }
     return {} as any
   }
 }
@@ -76,7 +91,7 @@ describe('CreatePasswordController', () => {
   beforeAll(() => {
     createPassword = jest.fn()
     idValidator = mock()
-    idValidator.isValid.mockReturnValue(true)
+    idValidator.isValid.mockImplementation(() => true)
   })
 
   beforeEach(() => {
@@ -122,7 +137,7 @@ describe('CreatePasswordController', () => {
         userId: 'invalid_id'
       }
     }
-    idValidator.isValid.mockReturnValueOnce(false)
+    idValidator.isValid.mockImplementationOnce(() => false)
 
     const response = await sut.handle(httpRequest)
 
@@ -145,5 +160,42 @@ describe('CreatePasswordController', () => {
 
     expect(createPassword).toHaveBeenCalledWith({ userId: 'valid_id', password: 'any_password', title: 'any_title' })
     expect(createPassword).toHaveBeenCalledTimes(1)
+  })
+
+  it('should return 400 if CreatePassword throws UserNotFound error', async () => {
+    const httpRequest = {
+      body: {
+        password: 'any_password',
+        title: 'any_title'
+      },
+      auth: {
+        userId: 'valid_id'
+      }
+    }
+    createPassword.mockImplementationOnce(() => { throw new UserNotFoundError() })
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new UserNotFoundError())
+  })
+
+  it('should return 500 if CreatePassword throws unknown error', async () => {
+    const httpRequest = {
+      body: {
+        password: 'any_password',
+        title: 'any_title'
+      },
+      auth: {
+        userId: 'valid_id'
+      }
+    }
+    const error = new Error('any_error')
+    createPassword.mockImplementationOnce(() => { throw error })
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(error)
   })
 })
