@@ -1,91 +1,9 @@
 import { mock, MockProxy } from 'jest-mock-extended'
 
 import { UserNotFoundError } from '@/domain/errors'
-import { CreatePassword } from '@/domain/usecases'
-
-type HttpRequest = {
-  body: {
-    password?: string
-    title?: string
-  }
-  auth: {
-    userId?: string
-  }
-}
-
-type HttpResponse = {
-  body: MissingParamError | InvalidParamError | UserNotFoundError | { password: string, userId: string, title: string }
-  statusCode: number
-}
-
-class MissingParamError extends Error {
-  constructor (param: string) {
-    super()
-    this.message = `Missing param: ${param}`
-    this.name = 'MissingParamError'
-  }
-}
-
-class InvalidParamError extends Error {
-  constructor (param: string) {
-    super()
-    this.message = `Invalid param: ${param}`
-    this.name = 'InvalidParamError'
-  }
-}
-
-interface IdValidator {
-  isValid: (id: string) => boolean
-}
-
-class CreatePasswordController {
-  constructor (private readonly idValidator: IdValidator, private readonly createPassword: CreatePassword) {}
-
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { password, title } = httpRequest.body
-    const { userId } = httpRequest.auth
-    if (password === undefined || password === '' || password === null) {
-      return {
-        body: new MissingParamError('password'),
-        statusCode: 400
-      }
-    }
-
-    if (title === undefined || title === '' || title === null) {
-      return {
-        body: new MissingParamError('title'),
-        statusCode: 400
-      }
-    }
-
-    if (!this.idValidator.isValid(userId ?? '') || userId === undefined) {
-      return {
-        body: new InvalidParamError('userId'),
-        statusCode: 400
-      }
-    }
-
-    try {
-      const createdPassword = await this.createPassword({ password, title, userId })
-      return {
-        body: createdPassword,
-        statusCode: 201
-      }
-    } catch (err: any) {
-      if (err instanceof UserNotFoundError) {
-        return {
-          body: new UserNotFoundError(),
-          statusCode: 400
-        }
-      }
-
-      return {
-        body: err,
-        statusCode: 500
-      }
-    }
-  }
-}
+import { CreatePasswordController } from '@/application/controllers'
+import { IdValidator } from '@/application/contracts/gateways'
+import { InvalidParamError, MissingParamError } from '@/application/errors'
 
 describe('CreatePasswordController', () => {
   let sut: CreatePasswordController
