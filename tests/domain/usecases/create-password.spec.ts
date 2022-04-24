@@ -29,7 +29,7 @@ describe('Create Password Usecase', () => {
       userId
     })
     loadUserByIdRepo = mock()
-    loadUserByIdRepo.loadById.mockResolvedValue(async () => ({}))
+    loadUserByIdRepo.loadById.mockResolvedValue({} as any)
   })
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('Create Password Usecase', () => {
   })
 
   it('should throw if user not found', async () => {
-    loadUserByIdRepo.loadById.mockReturnValueOnce(undefined)
+    loadUserByIdRepo.loadById.mockResolvedValueOnce(undefined)
 
     const promise = sut({ password, title, userId })
 
