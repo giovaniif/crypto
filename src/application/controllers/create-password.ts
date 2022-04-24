@@ -1,10 +1,10 @@
 import { CreatePassword } from '@/domain/usecases'
 import { HttpRequest, HttpResponse } from '@/application/helpers/http'
-import { InvalidParamError, MissingParamError } from '@/application/errors'
+import { MissingParamError } from '@/application/errors'
 import { UserNotFoundError } from '@/domain/errors'
 
 type Request = HttpRequest<{ password?: string, title?: string, userId?: string }>
-type Response = HttpResponse<MissingParamError | InvalidParamError | UserNotFoundError | { password: string, userId: string, title: string }>
+type Response = HttpResponse<MissingParamError | UserNotFoundError | { password: string, userId: string, title: string }>
 
 export class CreatePasswordController {
   constructor (private readonly createPassword: CreatePassword) {}
