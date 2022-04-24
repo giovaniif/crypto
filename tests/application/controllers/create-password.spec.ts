@@ -1,24 +1,18 @@
-import { mock, MockProxy } from 'jest-mock-extended'
-
 import { UserNotFoundError } from '@/domain/errors'
 import { CreatePasswordController } from '@/application/controllers'
-import { IdValidator } from '@/application/contracts/gateways'
-import { InvalidParamError, MissingParamError } from '@/application/errors'
+import { MissingParamError } from '@/application/errors'
 
 describe('CreatePasswordController', () => {
   let sut: CreatePasswordController
   let createPassword: jest.Mock
-  let idValidator: MockProxy<IdValidator>
 
   beforeAll(() => {
     createPassword = jest.fn()
     createPassword.mockImplementation(async () => ({ any: 'any' }))
-    idValidator = mock()
-    idValidator.isValid.mockImplementation(() => true)
   })
 
   beforeEach(() => {
-    sut = new CreatePasswordController(idValidator, createPassword)
+    sut = new CreatePasswordController(createPassword)
   })
 
   it('should return 400 if no password is provided', async () => {
@@ -50,22 +44,19 @@ describe('CreatePasswordController', () => {
     expect(response.body).toEqual(new MissingParamError('title'))
   })
 
-  it('shold return 400 if an invalid user id is provided', async () => {
+  it('should return 400 if no userId is provided', async () => {
     const httpRequest = {
       body: {
         password: 'any_password',
         title: 'any_title'
       },
-      auth: {
-        userId: 'invalid_id'
-      }
+      auth: {}
     }
-    idValidator.isValid.mockImplementationOnce(() => false)
 
     const response = await sut.handle(httpRequest)
 
     expect(response.statusCode).toBe(400)
-    expect(response.body).toEqual(new InvalidParamError('userId'))
+    expect(response.body).toEqual(new MissingParamError('userId'))
   })
 
   it('should call createPassword with correct values', async () => {

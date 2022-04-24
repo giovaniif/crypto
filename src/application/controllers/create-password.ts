@@ -1,4 +1,3 @@
-import { IdValidator } from '@/application/contracts/gateways'
 import { CreatePassword } from '@/domain/usecases'
 import { HttpRequest, HttpResponse } from '@/application/helpers/http'
 import { InvalidParamError, MissingParamError } from '@/application/errors'
@@ -8,7 +7,7 @@ type Request = HttpRequest<{ password?: string, title?: string }>
 type Response = HttpResponse<MissingParamError | InvalidParamError | UserNotFoundError | { password: string, userId: string, title: string }>
 
 export class CreatePasswordController {
-  constructor (private readonly idValidator: IdValidator, private readonly createPassword: CreatePassword) {}
+  constructor (private readonly createPassword: CreatePassword) {}
 
   async handle (httpRequest: Request): Promise<Response> {
     const { password, title } = httpRequest.body
@@ -27,9 +26,9 @@ export class CreatePasswordController {
       }
     }
 
-    if (!this.idValidator.isValid(userId ?? '') || userId === undefined) {
+    if (userId === undefined) {
       return {
-        body: new InvalidParamError('userId'),
+        body: new MissingParamError('userId'),
         statusCode: 400
       }
     }
