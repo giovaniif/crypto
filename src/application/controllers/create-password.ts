@@ -3,15 +3,14 @@ import { HttpRequest, HttpResponse } from '@/application/helpers/http'
 import { InvalidParamError, MissingParamError } from '@/application/errors'
 import { UserNotFoundError } from '@/domain/errors'
 
-type Request = HttpRequest<{ password?: string, title?: string }>
+type Request = HttpRequest<{ password?: string, title?: string, userId?: string }>
 type Response = HttpResponse<MissingParamError | InvalidParamError | UserNotFoundError | { password: string, userId: string, title: string }>
 
 export class CreatePasswordController {
   constructor (private readonly createPassword: CreatePassword) {}
 
   async handle (httpRequest: Request): Promise<Response> {
-    const { password, title } = httpRequest.body
-    const { userId } = httpRequest.auth
+    const { password, title, userId } = httpRequest.body
     if (password === undefined || password === '' || password === null) {
       return {
         body: new MissingParamError('password'),

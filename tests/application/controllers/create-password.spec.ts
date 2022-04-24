@@ -19,8 +19,7 @@ describe('CreatePasswordController', () => {
     const httpRequest = {
       body: {
         password: undefined
-      },
-      auth: {}
+      }
     }
 
     const response = await sut.handle(httpRequest)
@@ -34,8 +33,7 @@ describe('CreatePasswordController', () => {
       body: {
         password: 'any_password',
         title: undefined
-      },
-      auth: {}
+      }
     }
 
     const response = await sut.handle(httpRequest)
@@ -49,8 +47,7 @@ describe('CreatePasswordController', () => {
       body: {
         password: 'any_password',
         title: 'any_title'
-      },
-      auth: {}
+      }
     }
 
     const response = await sut.handle(httpRequest)
@@ -63,9 +60,7 @@ describe('CreatePasswordController', () => {
     const httpRequest = {
       body: {
         password: 'any_password',
-        title: 'any_title'
-      },
-      auth: {
+        title: 'any_title',
         userId: 'valid_id'
       }
     }
@@ -80,9 +75,7 @@ describe('CreatePasswordController', () => {
     const httpRequest = {
       body: {
         password: 'any_password',
-        title: 'any_title'
-      },
-      auth: {
+        title: 'any_title',
         userId: 'valid_id'
       }
     }
@@ -98,10 +91,8 @@ describe('CreatePasswordController', () => {
     const httpRequest = {
       body: {
         password: 'any_password',
-        title: 'any_title'
-      },
-      auth: {
-        userId: 'valid_id'
+        title: 'any_title',
+        userId: 'any_id'
       }
     }
     const error = new Error('any_error')
@@ -117,9 +108,7 @@ describe('CreatePasswordController', () => {
     const httpRequest = {
       body: {
         password: 'any_password',
-        title: 'any_title'
-      },
-      auth: {
+        title: 'any_title',
         userId: 'valid_id'
       }
     }
