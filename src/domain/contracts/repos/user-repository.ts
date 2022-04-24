@@ -1,6 +1,6 @@
 import { User } from '@/domain/entities'
 
-namespace LoadUserByIdRepository {
+export namespace LoadUserByIdRepository {
   export type Input = { userId: string }
   export type Output = Promise<User> | undefined
 }
