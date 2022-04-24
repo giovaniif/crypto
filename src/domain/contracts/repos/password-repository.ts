@@ -1,4 +1,4 @@
-namespace CreatePasswordRepository {
+export namespace CreatePasswordRepository {
   export type Input = {
     password: string
     title: string
