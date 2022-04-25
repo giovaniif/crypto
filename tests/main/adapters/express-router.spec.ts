@@ -13,7 +13,7 @@ describe('ExpressRouter', () => {
   let sut: RequestHandler
 
   beforeAll(() => {
-    req = getMockReq({ body: { any_body: 'any_body' } })
+    req = getMockReq({ body: { any_body: 'any_body' }, query: { any_query: 'any_query' } })
     res = getMockRes().res
     next = getMockRes().next
     controller = mock<Controller>()
@@ -27,7 +27,7 @@ describe('ExpressRouter', () => {
   it('should call handle with correct request', async () => {
     await sut(req, res, next)
 
-    expect(controller.handle).toHaveBeenCalledWith({ any_body: 'any_body' })
+    expect(controller.handle).toHaveBeenCalledWith({ any_body: 'any_body', any_query: 'any_query' })
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
 
