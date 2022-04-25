@@ -4,7 +4,7 @@ import { MissingParamError } from '@/application/errors'
 import { LoadUserPasswords } from '@/domain/usecases'
 
 type Request = HttpRequest<{ userId?: string }>
-type Response = HttpResponse<any>
+type Response = HttpResponse<MissingParamError | Array<{ userId: string, title: string, password: string, id: string }>>
 
 export class LoadUserPasswordsController implements Controller {
   constructor (private readonly loadUserPasswords: LoadUserPasswords) {}
@@ -19,9 +19,12 @@ export class LoadUserPasswordsController implements Controller {
     }
 
     try {
-      await this.loadUserPasswords({ userId })
-      return {} as any
-    } catch (err) {
+      const passwords = await this.loadUserPasswords({ userId })
+      return {
+        statusCode: 200,
+        body: passwords
+      }
+    } catch (err: any) {
       return {
         statusCode: 500,
         body: err

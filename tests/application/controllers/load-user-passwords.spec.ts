@@ -4,9 +4,17 @@ import { MissingParamError } from '@/application/errors'
 describe('LoadUserPasswords', () => {
   let sut: LoadUserPasswordsController
   let loadUserPasswords: jest.Mock
+  let passwords: Array<{ title: string, id: string, userId: string, password: string }>
 
   beforeAll(() => {
     loadUserPasswords = jest.fn()
+    passwords = [{
+      id: 'any_id',
+      password: 'any_password',
+      title: 'any_title',
+      userId: 'any_userId'
+    }]
+    loadUserPasswords.mockImplementation(async () => passwords)
   })
 
   beforeEach(() => {
@@ -40,5 +48,14 @@ describe('LoadUserPasswords', () => {
 
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(error)
+  })
+
+  it('should return 200 if usecase performs', async () => {
+    const httpRequest = { body: { userId: 'any_id' } }
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual(passwords)
   })
 })
