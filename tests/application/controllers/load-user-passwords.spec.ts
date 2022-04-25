@@ -30,4 +30,15 @@ describe('LoadUserPasswords', () => {
     expect(loadUserPasswords).toHaveBeenCalledWith({ userId: 'any_id' })
     expect(loadUserPasswords).toHaveBeenCalledTimes(1)
   })
+
+  it('should return 500 if loadUserPasswords throws', async () => {
+    const httpRequest = { body: { userId: 'any_id' } }
+    const error = new Error('any_error')
+    loadUserPasswords.mockImplementationOnce(async () => { throw error })
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(error)
+  })
 })

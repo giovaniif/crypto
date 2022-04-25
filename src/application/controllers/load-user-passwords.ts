@@ -18,10 +18,14 @@ export class LoadUserPasswordsController implements Controller {
       }
     }
 
-    await this.loadUserPasswords({ userId })
-    return {
-      statusCode: 400,
-      body: null
+    try {
+      await this.loadUserPasswords({ userId })
+      return {} as any
+    } catch (err) {
+      return {
+        statusCode: 500,
+        body: err
+      }
     }
   }
 }
