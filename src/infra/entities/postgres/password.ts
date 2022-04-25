@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
-@Entity('password')
+@Entity('passwords')
 export class PgPassword {
   @PrimaryGeneratedColumn()
   id!: number
@@ -11,6 +11,6 @@ export class PgPassword {
   @Column()
   password!: string
 
-  @Column()
+  @Column({ name: 'user_id' })
   userId!: string
 }
