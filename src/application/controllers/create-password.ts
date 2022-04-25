@@ -1,16 +1,15 @@
 import { CreatePassword } from '@/domain/usecases'
-import { HttpRequest, HttpResponse } from '@/application/helpers/http'
+import { HttpResponse } from '@/application/helpers/http'
 import { MissingParamError } from '@/application/errors'
 import { UserNotFoundError } from '@/domain/errors'
 
-type Request = HttpRequest<{ password?: string, title?: string, userId?: string }>
+type Request = { password?: string, title?: string, userId?: string }
 type Response = HttpResponse<MissingParamError | UserNotFoundError | { password: string, userId: string, title: string }>
 
 export class CreatePasswordController {
   constructor (private readonly createPassword: CreatePassword) {}
 
-  async handle (httpRequest: Request): Promise<Response> {
-    const { password, title, userId } = httpRequest.body
+  async handle ({ password, title, userId }: Request): Promise<Response> {
     if (password === undefined || password === '' || password === null) {
       return {
         body: new MissingParamError('password'),

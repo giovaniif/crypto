@@ -22,7 +22,7 @@ describe('LoadUserPasswords', () => {
   })
 
   it('should return 400 if user id is not provided', async () => {
-    const httpRequest = { body: { userId: undefined } }
+    const httpRequest = { userId: undefined }
 
     const httpResponse = await sut.handle(httpRequest)
 
@@ -31,7 +31,7 @@ describe('LoadUserPasswords', () => {
   })
 
   it('should call loadUserPasswords with correct values', async () => {
-    const httpRequest = { body: { userId: 'any_id' } }
+    const httpRequest = { userId: 'any_id' }
 
     await sut.handle(httpRequest)
 
@@ -40,7 +40,7 @@ describe('LoadUserPasswords', () => {
   })
 
   it('should return 500 if loadUserPasswords throws', async () => {
-    const httpRequest = { body: { userId: 'any_id' } }
+    const httpRequest = { userId: 'any_id' }
     const error = new Error('any_error')
     loadUserPasswords.mockImplementationOnce(async () => { throw error })
 
@@ -51,7 +51,7 @@ describe('LoadUserPasswords', () => {
   })
 
   it('should return 200 if usecase performs', async () => {
-    const httpRequest = { body: { userId: 'any_id' } }
+    const httpRequest = { userId: 'any_id' }
 
     const httpResponse = await sut.handle(httpRequest)
 

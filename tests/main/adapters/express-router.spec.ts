@@ -27,7 +27,7 @@ describe('ExpressRouter', () => {
   it('should call handle with correct request', async () => {
     await sut(req, res, next)
 
-    expect(controller.handle).toHaveBeenCalledWith({ body: { any_body: 'any_body' } })
+    expect(controller.handle).toHaveBeenCalledWith({ any_body: 'any_body' })
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
 
@@ -35,7 +35,7 @@ describe('ExpressRouter', () => {
     const req = getMockReq()
     await sut(req, res, next)
 
-    expect(controller.handle).toHaveBeenCalledWith({ body: {} })
+    expect(controller.handle).toHaveBeenCalledWith({})
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
 

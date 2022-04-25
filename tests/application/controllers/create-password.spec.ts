@@ -17,9 +17,7 @@ describe('CreatePasswordController', () => {
 
   it('should return 400 if no password is provided', async () => {
     const httpRequest = {
-      body: {
-        password: undefined
-      }
+      password: undefined
     }
 
     const response = await sut.handle(httpRequest)
@@ -30,10 +28,8 @@ describe('CreatePasswordController', () => {
 
   it('should return 400 if no title is provided', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: undefined
-      }
+      password: 'any_password',
+      title: undefined
     }
 
     const response = await sut.handle(httpRequest)
@@ -44,10 +40,8 @@ describe('CreatePasswordController', () => {
 
   it('should return 400 if no userId is provided', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: 'any_title'
-      }
+      password: 'any_password',
+      title: 'any_title'
     }
 
     const response = await sut.handle(httpRequest)
@@ -58,11 +52,9 @@ describe('CreatePasswordController', () => {
 
   it('should call createPassword with correct values', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: 'any_title',
-        userId: 'valid_id'
-      }
+      password: 'any_password',
+      title: 'any_title',
+      userId: 'valid_id'
     }
 
     await sut.handle(httpRequest)
@@ -73,11 +65,9 @@ describe('CreatePasswordController', () => {
 
   it('should return 400 if CreatePassword throws UserNotFound error', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: 'any_title',
-        userId: 'valid_id'
-      }
+      password: 'any_password',
+      title: 'any_title',
+      userId: 'valid_id'
     }
     createPassword.mockImplementationOnce(() => { throw new UserNotFoundError() })
 
@@ -89,11 +79,9 @@ describe('CreatePasswordController', () => {
 
   it('should return 500 if CreatePassword throws unknown error', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: 'any_title',
-        userId: 'any_id'
-      }
+      password: 'any_password',
+      title: 'any_title',
+      userId: 'any_id'
     }
     const error = new Error('any_error')
     createPassword.mockImplementationOnce(() => { throw error })
@@ -106,11 +94,9 @@ describe('CreatePasswordController', () => {
 
   it('should return 201 if usecase performs', async () => {
     const httpRequest = {
-      body: {
-        password: 'any_password',
-        title: 'any_title',
-        userId: 'valid_id'
-      }
+      password: 'any_password',
+      title: 'any_title',
+      userId: 'valid_id'
     }
 
     const httpResponse = await sut.handle(httpRequest)
