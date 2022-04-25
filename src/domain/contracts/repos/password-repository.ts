@@ -15,3 +15,16 @@ export namespace CreatePasswordRepository {
 export interface CreatePasswordRepository {
   createPassword: (input: CreatePasswordRepository.Input) => Promise<CreatePasswordRepository.Output>
 }
+
+export namespace LoadUserPasswordsRepository {
+  export type Input = {
+    userId: string
+  }
+  export type Output =
+    Array<{ id: string, title: string, userId: string, password: string }>
+
+}
+
+export interface LoadUserPasswordsRepository {
+  loadUserPasswords: (input: LoadUserPasswordsRepository.Input) => Promise<LoadUserPasswordsRepository.Output>
+}
