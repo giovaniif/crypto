@@ -3,9 +3,14 @@ import { MissingParamError } from '@/application/errors'
 
 describe('LoadUserPasswords', () => {
   let sut: LoadUserPasswordsController
+  let loadUserPasswords: jest.Mock
+
+  beforeAll(() => {
+    loadUserPasswords = jest.fn()
+  })
 
   beforeEach(() => {
-    sut = new LoadUserPasswordsController()
+    sut = new LoadUserPasswordsController(loadUserPasswords)
   })
 
   it('should return 400 if user id is not provided', async () => {
@@ -15,5 +20,14 @@ describe('LoadUserPasswords', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('userId'))
+  })
+
+  it('should call loadUserPasswords with correct values', async () => {
+    const httpRequest = { body: { userId: 'any_id' } }
+
+    await sut.handle(httpRequest)
+
+    expect(loadUserPasswords).toHaveBeenCalledWith({ userId: 'any_id' })
+    expect(loadUserPasswords).toHaveBeenCalledTimes(1)
   })
 })
