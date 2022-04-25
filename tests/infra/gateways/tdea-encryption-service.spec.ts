@@ -1,5 +1,5 @@
 import { TDEAEncryptionService } from '@/infra/gateways'
-import { env } from '@/env'
+import { env } from '@/main/config/env'
 
 describe('TDEAEncryptionService', () => {
   it('should encrypt a string', () => {
