@@ -12,6 +12,7 @@ describe('Create Password Usecase', () => {
   let encryptedPassword: string
   let userId: string
   let title: string
+  let id: string
   let createPasswordRepo: MockProxy<CreatePasswordRepository>
   let loadUserByIdRepo: MockProxy<LoadUserByIdRepository>
 
@@ -22,11 +23,13 @@ describe('Create Password Usecase', () => {
     password = 'password'
     userId = 'userId'
     title = 'title'
+    id = 'id'
     createPasswordRepo = mock()
     createPasswordRepo.createPassword.mockResolvedValue({
       password: encryptedPassword,
       title,
-      userId
+      userId,
+      id
     })
     loadUserByIdRepo = mock()
     loadUserByIdRepo.loadById.mockResolvedValue({} as any)
@@ -78,7 +81,8 @@ describe('Create Password Usecase', () => {
     expect(result).toEqual({
       password: encryptedPassword,
       title,
-      userId
+      userId,
+      id
     })
   })
 })

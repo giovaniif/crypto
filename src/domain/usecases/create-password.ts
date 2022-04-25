@@ -5,7 +5,7 @@ import { LoadUserByIdRepository, CreatePasswordRepository } from '@/domain/contr
 export type CreatePassword = (input: Input) => Output
 type Setup = (encryptPassword: CryptoService, createPasswordRepo: CreatePasswordRepository, loadUserByIdRepo: LoadUserByIdRepository) => CreatePassword
 type Input = { password: string, userId: string, title: string }
-type Output = Promise<{ password: string, userId: string, title: string }>
+type Output = Promise<{ password: string, userId: string, title: string, id: string }>
 
 export const setupCreatePassword: Setup = (encryptPassword, createPasswordRepo, loadUserByIdRepo) => {
   return async ({ password, title, userId }) => {

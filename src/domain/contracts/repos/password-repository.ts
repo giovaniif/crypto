@@ -8,6 +8,7 @@ export namespace CreatePasswordRepository {
     password: string
     title: string
     userId: string
+    id: string
   }
 }
 

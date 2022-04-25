@@ -8,6 +8,11 @@ export class PostgresCreatePasswordRepository implements CreatePasswordRepositor
     const repo = getRepository(PgPassword)
     const password = repo.create(input)
     await repo.save(password)
-    return password
+    return {
+      id: password.id.toString(),
+      password: password.password,
+      userId: password.userId,
+      title: password.title
+    }
   }
 }
